@@ -1,141 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sequence Test</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            max-width: 600px;
-            width: 100%;
-        }
-        h1 {
-            text-align: center;
-            color: #4a4a4a;
-        }
-        .question {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #e6f3ff;
-            border-radius: 10px;
-        }
-        .sequence {
-            font-size: 1.2em;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        input[type="number"] {
-            width: 60px;
-            padding: 5px;
-            font-size: 1em;
-            border: 2px solid #3498db;
-            border-radius: 5px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        #result {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .correct {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .incorrect {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>October Sequence Test</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:28px 16px;background:#f4f3ef;color:#303331;font-family:Arial,sans-serif}
+main{max-width:1000px;margin:auto}
+h1{text-align:center;font-size:26px;margin:0 0 24px}
+.question{--accent:#78387d;--soft:#f7eff8;margin:0 0 18px;padding:16px;border:2px solid color-mix(in srgb,var(--accent) 38%,white);border-radius:9px;background:linear-gradient(white,var(--soft));box-shadow:0 2px 5px #0000000c}
+.question:nth-child(2){--accent:#287749;--soft:#eef7f0}
+.question:nth-child(3){--accent:#276890;--soft:#edf5fb}
+.question:nth-child(4){--accent:#b45c21;--soft:#fff4e9}
+.number{display:inline-grid;place-items:center;width:32px;height:36px;background:var(--accent);color:white;font-weight:bold;font-size:25px;border-radius:5px;margin-bottom:12px}
+.question-content{display:grid;grid-template-columns:minmax(0,1fr) 174px;gap:22px;align-items:center}
+.sequence{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 0 22px}
+.tile{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border:2px solid #bdc2bf;border-radius:5px;background:white;box-shadow:0 2px 2px #00000012;font-size:22px;font-weight:600}
+.arrow{color:#8a918d;font-size:19px}
+.answer{min-width:0;text-align:center;color:var(--accent);border-color:var(--accent);font:600 22px Arial,sans-serif;padding:0;appearance:textfield}
+.answer::-webkit-inner-spin-button,.answer::-webkit-outer-spin-button{appearance:none;margin:0}
+.keypad{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,34px);gap:5px;padding:9px;border:1px solid color-mix(in srgb,var(--accent) 35%,white);border-radius:5px;background:var(--soft)}
+button{font:inherit;cursor:pointer;border:1px solid #c3c7c4;border-radius:4px;background:white;color:#343936;box-shadow:0 2px 0 #0000000b}
+button:hover{background:var(--soft);border-color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent,#276890);outline-offset:3px}
+.keypad button{font-size:14px;padding:0}
+.keypad .enter{grid-column:4;grid-row:4 / span 2;font-size:11px;background:var(--accent);color:white;border-color:var(--accent)}
+.keypad .zero{grid-column:1 / span 2}
+.keypad .plus{grid-column:4;grid-row:2 / span 2}
+.feedback{min-height:20px;margin:8px 0 0;font-size:14px;color:var(--accent)}
+.submit:hover{background:#26382c}
+.submit{width:100%;padding:13px;background:#34483b;color:white;border:0;font-weight:bold}
+#result{text-align:center;min-height:24px;margin-top:16px;font-weight:bold}
+.correct{color:#287749}.incorrect{color:#a44137}
+@media(max-width:650px){body{padding:18px 10px}.question{padding:12px}.question-content{grid-template-columns:1fr;gap:0}.keypad{width:174px;justify-self:end}.sequence{gap:5px;padding-bottom:12px}.tile{width:38px;height:38px;flex-basis:38px;font-size:18px}.arrow{font-size:14px}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Sequence Test</h1>
-        <form id="sequenceForm">
-            <div class="question">
-                <p class="sequence">1. 5, 10, 19, 32, 49, 70, ?</p>
-                <input type="number" id="answer1" required>
-            </div>
-            <div class="question">
-                <p class="sequence">2. 4, 7, 12, 20, 32, 48, 64, ?</p>
-                <input type="number" id="answer2" required>
-            </div>
-            <div class="question">
-                <p class="sequence">3. 3, 2, 2, 3, 8, ?</p>
-                <input type="number" id="answer3" required>
-            </div>
-            <button type="submit">Submit Answers</button>
-        </form>
-        <div id="result"></div>
-    </div>
-    <script>
-        console.log("Script started");
-        document.addEventListener('DOMContentLoaded', (event) => {
-            console.log("DOM fully loaded and parsed");
-            const form = document.getElementById('sequenceForm');
-            const resultDiv = document.getElementById('result');
-
-            if (form && resultDiv) {
-                console.log("Form and result div found");
-                form.addEventListener('submit', function(e) {
-                    console.log("Form submitted");
-                    e.preventDefault();
-                    const answers = [95, 64, 35];
-                    const userAnswers = [
-                        document.getElementById('answer1').value,
-                        document.getElementById('answer2').value,
-                        document.getElementById('answer3').value
-                    ];
-                    console.log("User answers:", userAnswers);
-                    let allCorrect = true;
-                    for (let i = 0; i < answers.length; i++) {
-                        if (parseInt(userAnswers[i]) !== answers[i]) {
-                            allCorrect = false;
-                            break;
-                        }
-                    }
-                    console.log("All correct?", allCorrect);
-                    if (allCorrect) {
-                        resultDiv.textContent = "Correct, Mom!";
-                        resultDiv.className = "correct";
-                    } else {
-                        resultDiv.textContent = "Sorry, that's not correct. Please try again!";
-                        resultDiv.className = "incorrect";
-                    }
-                    console.log("Result updated");
-                });
-            } else {
-                console.error("Form or result div not found");
-            }
-        });
-    </script>
+<main>
+<h1>October Sequence Test</h1>
+<form id="sequenceForm">
+<div id="questions"></div>
+<button class="submit" type="submit">Submit Answers</button>
+</form>
+<div id="result" role="status" aria-live="polite"></div>
+</main>
+<script>
+const sequences = [[5,10,19,32,49,70],[4,7,12,20,32,48,64],[3,2,2,3,8],[1,4,3,11,15]];
+const answers = [95,64,35,14];
+const keys = ['C','±','⌫','−','7','8','9','+','4','5','6','1','2','3','Enter','0','.'];
+const questions = document.getElementById('questions');
+sequences.forEach((sequence,index)=>{
+ const n=index+1;
+ const card=document.createElement('section');
+ card.className='question'; card.setAttribute('aria-label',`Question ${n}`);
+ card.innerHTML=`<span class="number" aria-hidden="true">${n}</span><div class="question-content"><div class="sequence">${sequence.map(value=>`<span class="tile">${value}</span><span class="arrow" aria-hidden="true">→</span>`).join('')}<input class="tile answer" type="text" inputmode="decimal" pattern="-?[0-9]+([.][0-9]+)?" id="answer${n}" aria-label="Answer to question ${n}" autocomplete="off" required></div><div class="keypad" role="group" aria-label="Numeric keypad for question ${n}">${keys.map(key=>`<button type="button" data-key="${key}" class="${key==='Enter'?'enter':key==='0'?'zero':key==='+'?'plus':''}" aria-label="${key==='⌫'?'Backspace':key==='Enter'?'Check answer':key}">${key}</button>`).join('')}</div></div><p class="feedback" role="status" aria-live="polite"></p>`;
+ const input=card.querySelector('input');
+ const feedback=card.querySelector('.feedback');
+ function check(){feedback.textContent=input.value.trim()===''?'Enter an answer.':Number(input.value)===answers[index]?'Correct!':'Try again.';}
+ card.querySelector('.keypad').addEventListener('click',event=>{
+  const key=event.target.closest('button')?.dataset.key;
+  if(!key)return;
+  if(key==='Enter'){check();return;}
+  input.focus();
+  if(key==='C')input.value='';
+  else if(key==='⌫')input.value=input.value.slice(0,-1);
+  else if(key==='−'||key==='±')input.value=input.value.startsWith('-')?input.value.slice(1):'-'+input.value;
+  else if(key==='+'&&input.value.startsWith('-'))input.value=input.value.slice(1);
+  else if(/^[0-9.]$/.test(key)&&!(key==='.'&&input.value.includes('.')))input.value+=key;
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+ });
+ input.addEventListener('input',()=>{feedback.textContent='';document.getElementById('result').textContent='';});
+ input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();check();}});
+ questions.appendChild(card);
+});
+document.getElementById('sequenceForm').addEventListener('submit',event=>{
+ event.preventDefault();
+ const correct=answers.every((answer,index)=>Number(document.getElementById(`answer${index+1}`).value)===answer);
+ const result=document.getElementById('result');
+ result.textContent=correct?'Correct, Mom!':"Sorry, that's not correct. Please try again!";
+ result.className=correct?'correct':'incorrect';
+});
+</script>
 </body>
 </html>
